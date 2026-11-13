@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ICO · Ingeniería Comercial</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Montserrat:wght@800&display=swap" rel="stylesheet">
+<style>
+:root{--carbon:#151F28;--azul:#046BF4;--naranja:#FF5300;--amarillo:#FEBD01;--crema:#FEF0D6;--lavanda:#EDF1FD}
+*{box-sizing:border-box;margin:0}
+body{font-family:Inter,'Open Sans',Arial,sans-serif;color:var(--carbon);background:#fff;line-height:1.6}
+h1,h2,h3,.logo{font-family:Montserrat,Poppins,Arial,sans-serif;font-weight:800;line-height:1.1}
+a:focus-visible,button:focus-visible{outline:3px solid var(--azul);outline-offset:2px}
+.wrap{max-width:1000px;margin:auto}
+header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:2px solid var(--lavanda)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;padding:10px 20px}
+.logo{display:flex;align-items:center;gap:8px;font-size:1.7rem;color:var(--carbon);text-decoration:none}
+nav{display:flex;flex-wrap:wrap;gap:2px}
+nav a{color:var(--azul);font-weight:600;font-size:.95rem;text-decoration:none;padding:6px 12px;border-radius:99px}
+nav a:hover{background:var(--lavanda)}
+nav a.act{background:var(--azul);color:#fff}
+.page{display:none;padding:56px 20px}
+.page.on{display:block}
+#inicio{padding:0}
+.hero{position:relative;overflow:hidden;padding:72px 20px 88px}
+.blob{position:absolute}
+.b1{top:-80px;right:-70px;width:340px;height:260px;background:var(--crema);border-radius:62% 38% 30% 70%/60% 44% 56% 40%}
+.b2{bottom:-90px;left:-70px;width:300px;height:240px;background:var(--lavanda);border-radius:40% 60% 62% 38%/55% 40% 60% 45%}
+.hero .wrap{position:relative;display:grid;grid-template-columns:1.5fr 1fr;gap:24px;align-items:center}
+.hero h1{font-size:clamp(2.2rem,6vw,4rem);text-transform:uppercase;margin-bottom:16px}
+.hero p{font-size:1.15rem;max-width:44ch;margin-bottom:24px}
+.hero .lema{font-size:clamp(1.05rem,2.4vw,1.35rem);font-weight:600;color:var(--azul);border-left:4px solid var(--amarillo);padding-left:14px;margin-bottom:20px;max-width:34ch;line-height:1.35}
+.logo-hero{width:100%;max-width:300px;height:auto;justify-self:center;display:block}
+.atajos{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;padding:48px 20px}
+.atajo{background:var(--lavanda);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:10px}
+.atajo:nth-child(even){background:var(--crema)}
+.atajo h3{font-size:1.1rem}
+.atajo .btn{margin-top:auto;align-self:flex-start;padding:8px 18px;font-size:.9rem}
+.btn{display:inline-block;padding:12px 24px;border:0;border-radius:12px;font:600 1rem Inter,Arial,sans-serif;color:#fff;text-decoration:none;cursor:pointer}
+.b-azul{background:var(--azul)}.b-nar{background:var(--naranja)}
+.btn:hover{filter:brightness(.92)}
+h2.sec{font-size:clamp(1.6rem,4vw,2.3rem);text-transform:uppercase;margin-bottom:8px}
+.sub{margin-bottom:28px;max-width:60ch}
+.apar{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:20px}
+.card{display:flex;flex-direction:column;border:2px solid var(--carbon);border-radius:18px;overflow:hidden;background:#fff}
+.foto{height:180px;display:grid;place-items:center;font-size:.85rem;font-weight:600;overflow:hidden}
+.foto img{width:100%;height:100%;object-fit:cover;display:block}
+.foto .ph{height:100%;border-radius:0}
+.card:nth-child(odd) .foto{background:var(--crema)}.card:nth-child(even) .foto{background:var(--lavanda)}
+.cb{display:flex;flex-direction:column;gap:10px;padding:18px;flex:1}
+.cb h3{font-size:1.2rem;color:var(--azul)}
+.tag{align-self:flex-start;background:var(--naranja);color:#fff;font-size:.8rem;font-weight:600;padding:2px 12px;border-radius:99px}
+.tag.y{background:var(--amarillo);color:var(--carbon)}
+.cb .btn{margin-top:auto;align-self:flex-start}
+#calendario{background:var(--lavanda)}
+.cal{background:#fff;border-radius:18px;padding:20px}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.ch h3{font-size:1.4rem;text-transform:capitalize}
+.ch button{width:42px;height:42px;border:0;border-radius:12px;background:var(--azul);color:#fff;font:600 1.3rem Inter,sans-serif;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.wd{text-align:center;font-weight:600;font-size:.85rem;color:var(--azul)}
+.day{aspect-ratio:1;border:0;border-radius:10px;background:var(--lavanda);font:600 .95rem Inter,sans-serif;color:var(--carbon);cursor:pointer}
+.day:hover{background:#dfe6fb}
+.day.ev{background:var(--naranja);color:#fff}
+.day.tal{background:var(--amarillo);color:var(--carbon)}
+.day.hoy{outline:3px solid var(--azul);outline-offset:-3px}
+.day.sel{outline:3px solid var(--carbon);outline-offset:-3px}
+.blank{visibility:hidden}
+.leyenda{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-size:.9rem}
+.leyenda i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px}
+#info{margin-top:14px;padding:14px 16px;border-radius:12px;background:var(--crema);min-height:54px}
+#info p{margin-top:4px}
+.info-fotos{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:12px}
+.info-fotos img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:12px;display:block}
+.info-fotos .ph{height:auto;aspect-ratio:3/4}
+.gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.gal figure{margin:0}
+.ph,.gal img{height:190px;width:100%;border-radius:18px;display:block;object-fit:cover}
+.ph{display:grid;place-items:center;text-align:center;padding:8px;font-weight:600;font-size:.9rem;background:var(--crema)}
+.gal figure:nth-child(even) .ph{background:var(--lavanda)}
+.gal figcaption{padding:8px 4px;font-weight:600}
+.gal figcaption p{font-weight:400;font-size:.9rem;margin-top:2px}
+@media(min-width:700px){.gal figure:first-child{grid-column:span 2}}
+
+/* CARRUSEL DENTRO DE CADA RECUERDO DE LA GALERÍA */
+.gcar{position:relative;overflow:hidden;border-radius:18px}
+.gtrack{display:flex;transition:transform .4s ease}
+.gtrack>*{flex:0 0 100%;min-width:0}
+.gbtn{position:absolute;top:50%;transform:translateY(-50%);width:32px;height:32px;border:0;border-radius:50%;background:rgba(4,107,244,.85);color:#fff;font-size:14px;cursor:pointer;z-index:2;display:flex;align-items:center;justify-content:center}
+.gbtn:hover{background:var(--azul)}
+.gprev{left:8px}.gnext{right:8px}
+.gdots{position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:2}
+.gdot{width:9px;height:9px;border-radius:50%;border:0;padding:0;background:rgba(255,255,255,.65);cursor:pointer;transition:all .3s ease}
+.gdot.on{background:var(--amarillo);width:20px;border-radius:6px}
+
+.lgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}
+.lider{margin:0;border:3px solid var(--amarillo);border-radius:18px;overflow:hidden;background:#fff}
+.lider.h{border-color:var(--naranja)}
+.lider img,.lider .ph{height:220px;border-radius:0}
+.lider figcaption{padding:12px 14px;font-size:.85rem}
+.lider strong{display:block;font-size:1rem}
+/* Huella Digital: fotos fijas, no se agrandan al tocarlas */
+.lider.h img{cursor:default;pointer-events:none;-webkit-user-select:none;user-select:none}
+footer{background:var(--carbon);color:#fff;padding:32px 20px}
+footer .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+@media(max-width:700px){.hero .wrap{grid-template-columns:1fr}.logo-hero{max-width:200px;justify-self:start}}
+
+/* TEXTOS INSTITUCIONALES DE INICIO */
+.inst{padding:48px 20px 8px}
+.rotulo{font-size:.95rem;text-transform:uppercase;letter-spacing:.12em;color:var(--naranja);margin-bottom:10px}
+.esencia{background:var(--lavanda);border-left:6px solid var(--azul);border-radius:18px;padding:26px 28px}
+.esencia p{font-size:1.05rem;max-width:68ch}
+.proposito{background:var(--carbon);color:#fff;text-align:center;padding:56px 20px;margin-top:40px}
+.proposito .rotulo{color:var(--amarillo)}
+.proposito blockquote{font-family:Montserrat,Poppins,Arial,sans-serif;font-weight:800;font-size:clamp(1.5rem,4vw,2.4rem);line-height:1.2;max-width:26ch;margin:0 auto}
+.legado{text-align:center;padding:56px 20px 0}
+.legado svg{display:block;margin:0 auto 12px}
+.legado .rotulo{margin-bottom:6px}
+.legado p{font-family:Montserrat,Poppins,Arial,sans-serif;font-weight:800;font-size:clamp(1.2rem,3vw,1.7rem);line-height:1.25;max-width:28ch;margin:0 auto}
+
+/* AMPLIAR FOTOS AL TOCARLAS */
+.gal img,.info-fotos img,.foto img,.lider:not(.h) img,.carrusel-slide img{cursor:zoom-in}
+.lb{position:fixed;inset:0;background:rgba(21,31,40,.92);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.lb.on{display:flex}
+.lb img{max-width:100%;max-height:100%;object-fit:contain;border-radius:12px}
+.lb button{position:absolute;top:14px;right:14px;width:44px;height:44px;border:0;border-radius:50%;background:var(--amarillo);color:var(--carbon);font:800 1.2rem Inter,Arial,sans-serif;cursor:pointer}
+.lb button.lbnav{display:none;top:50%;right:auto;left:14px;transform:translateY(-50%);background:var(--azul);color:#fff}
+.lb.multi button.lbnav{display:block}
+.lb button#lb-next{left:auto;right:14px}
+
+/* CARRUSEL DE EVENTOS (mitad de la página, formato vertical para fotos de celular) */
+.carrusel-wrapper{position:relative;width:50%;min-width:300px;max-width:520px;overflow:hidden;background:linear-gradient(135deg,var(--carbon) 0%,#0d1418 100%);border-radius:18px;margin:0 auto 32px}
+.carrusel-track{display:flex;transition:transform .5s ease-in-out}
+.carrusel-slide{min-width:100%;display:flex;justify-content:center;align-items:center;aspect-ratio:4/5;position:relative;background:linear-gradient(135deg,var(--carbon) 0%,#0d1418 100%)}
+.carrusel-slide img{width:100%;height:100%;object-fit:cover}
+.carrusel-slide .ph{height:100%;border-radius:0}
+.carrusel-slide-placeholder{display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%;height:100%;background:linear-gradient(135deg,var(--azul) 0%,var(--naranja) 100%);color:#fff;font-size:18px;text-align:center;padding:20px}
+.carrusel-slide-placeholder p{margin-top:10px;font-size:14px;opacity:.8}
+.carrusel-controles{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10}
+.carrusel-punto{width:10px;height:10px;border-radius:50%;background-color:rgba(255,255,255,.5);cursor:pointer;transition:all .3s ease;border:2px solid transparent;padding:0}
+.carrusel-punto.activo{background-color:var(--amarillo);border-color:var(--amarillo);width:24px;border-radius:6px}
+.carrusel-punto:hover{background-color:rgba(254,189,1,.7)}
+.carrusel-boton{position:absolute;top:50%;transform:translateY(-50%);background-color:rgba(4,107,244,.8);color:#fff;border:none;width:38px;height:38px;font-size:16px;cursor:pointer;border-radius:50%;display:flex;justify-content:center;align-items:center;transition:all .3s ease;z-index:5;font-weight:bold}
+.carrusel-boton:hover{background-color:var(--azul);transform:translateY(-50%) scale(1.1)}
+.carrusel-anterior{left:10px}
+.carrusel-siguiente{right:10px}
+.carrusel-info{position:absolute;bottom:38px;left:10px;right:10px;background-color:rgba(0,0,0,.6);color:#fff;padding:10px 12px;border-radius:8px;border-left:4px solid var(--amarillo);z-index:4;pointer-events:none}
+.carrusel-info h3{font-size:15px;margin-bottom:3px;color:var(--amarillo);font-family:Montserrat,Poppins,Arial,sans-serif;font-weight:800}
+.carrusel-info p{font-size:12px;opacity:.9;line-height:1.4}
+@media(max-width:700px){
+  .carrusel-wrapper{width:calc(100% - 40px)}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="anillo" viewBox="0 0 100 100">
+    <g fill="none" stroke-width="18" transform="rotate(-45 50 50)">
+      <circle cx="50" cy="50" r="38" stroke="#151F28" stroke-dasharray="119.4 119.4"/>
+      <circle cx="50" cy="50" r="38" stroke="#046BF4" stroke-dasharray="40 198.8" stroke-dashoffset="-119.4"/>
+      <circle cx="50" cy="50" r="38" stroke="#FF5300" stroke-dasharray="40 198.8" stroke-dashoffset="-159.4"/>
+      <circle cx="50" cy="50" r="38" stroke="#FEBD01" stroke-dasharray="39.4 199.4" stroke-dashoffset="-199.4"/>
+    </g>
+  </symbol>
+</svg>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="#inicio" data-p="inicio"><svg width="34" height="34"><use href="#anillo"/></svg>ICO</a>
+    <nav>
+      <a href="#inicio" data-p="inicio">Inicio</a>
+      <a href="#actividades" data-p="actividades">Actividades</a>
+      <a href="#calendario" data-p="calendario">Calendario</a>
+      <a href="#galeria" data-p="galeria">Galería</a>
+      <a href="#excelencia" data-p="excelencia">Líderes de Excelencia</a>
+      <a href="#huella" data-p="huella">Huella Digital ICO</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="page on" id="inicio">
+  <div class="hero">
+    <span class="blob b1"></span><span class="blob b2"></span>
+    <div class="wrap">
+      <div>
+        <!-- EDITAR TEXTO AQUÍ: frase principal de bienvenida -->
+        <p class="lema">Liderando el futuro de los negocios desde la sede La Paz.</p>
+        <h1>Aquí se vive ICO</h1>
+        <p>Proyectos, eventos y retos de Ingeniería Comercial. Explora lo que pasa cada semestre y súmate.</p>
+        <a class="btn b-azul" href="#actividades" data-p="actividades">Ver actividades</a>
+      </div>
+      <img class="logo-hero" src="https://i.ibb.co/RpWq4xRD/LOGO-ICO.jpg" alt="ICO Ingeniería Comercial, Universidad Franz Tamayo">
+    </div>
+  </div>
+
+  <!-- ===== NUESTRA ESENCIA ===== -->
+  <div class="wrap inst">
+    <div class="esencia">
+      <h2 class="rotulo">Nuestra esencia</h2>
+      <!-- EDITAR TEXTO AQUÍ: Nuestra esencia -->
+      <p>En la carrera de Ingeniería Comercial de UNIFRANZ no solo estudiamos los mercados, los transformamos. Este espacio digital es el punto de encuentro donde documentamos el talento, la estrategia y la ejecución de nuestros estudiantes. Aquí, la teoría de las aulas se convierte en un impacto real.</p>
+    </div>
+  </div>
+
+  <!-- ===== NUESTRO PROPÓSITO ===== -->
+  <div class="proposito">
+    <h2 class="rotulo">Nuestro propósito</h2>
+    <!-- EDITAR TEXTO AQUÍ: Nuestro propósito -->
+    <blockquote>Transformamos el conocimiento en valor económico y social.</blockquote>
+  </div>
+
+  <div class="wrap" style="padding:56px 20px 0">
+    <h2 class="sec">Momentos ICO</h2>
+    <!-- EDITAR DESCRIPCIÓN AQUÍ -->
+    <p class="sub">Los eventos y actividades que marcan cada semestre.</p>
+  </div>
+
+  <!-- CARRUSEL: las fotos se agregan en el bloque CARRUSEL del script (al final del archivo) -->
+  <div class="carrusel-wrapper">
+    <div class="carrusel-track" id="carrusel-track"></div>
+
+    <div class="carrusel-info">
+      <h3 id="carrusel-titulo">Evento Memorable</h3>
+      <p id="carrusel-descripcion">Haz clic en los puntos o usa los botones para navegar</p>
+    </div>
+
+    <button class="carrusel-boton carrusel-anterior" id="btn-anterior" aria-label="Anterior">❮</button>
+    <button class="carrusel-boton carrusel-siguiente" id="btn-siguiente" aria-label="Siguiente">❯</button>
+
+    <div class="carrusel-controles" id="carrusel-controles"></div>
+  </div>
+
+  <!-- ===== NUESTRO LEGADO ===== -->
+  <div class="legado">
+    <svg width="40" height="40" aria-hidden="true"><use href="#anillo"/></svg>
+    <h2 class="rotulo">Nuestro legado</h2>
+    <!-- EDITAR TEXTO AQUÍ: Nuestro legado -->
+    <p>Bienvenidos al registro de nuestro legado.</p>
+  </div>
+
+  <div class="wrap atajos">
+    <div class="atajo"><h3>Actividades</h3><p>Proyectos, eventos y retos del semestre.</p><a class="btn b-azul" href="#actividades" data-p="actividades">Entrar</a></div>
+    <div class="atajo"><h3>Calendario</h3><p>Encuentra las fechas y eventos que no te puedes perder.</p><a class="btn b-azul" href="#calendario" data-p="calendario">Entrar</a></div>
+    <div class="atajo"><h3>Galería</h3><p>Así vivimos cada semestre.</p><a class="btn b-azul" href="#galeria" data-p="galeria">Entrar</a></div>
+    <div class="atajo"><h3>Líderes de Excelencia</h3><p>Conoce a los estudiantes que destacan.</p><a class="btn b-azul" href="#excelencia" data-p="excelencia">Entrar</a></div>
+    <div class="atajo"><h3>Huella Digital ICO</h3><p>Quienes dejan su marca en lo digital.</p><a class="btn b-azul" href="#huella" data-p="huella">Entrar</a></div>
+  </div>
+</section>
+
+<section class="page" id="actividades">
+  <div class="wrap">
+    <h2 class="sec">Actividades</h2>
+    <!-- EDITAR DESCRIPCIÓN AQUÍ -->
+    <p class="sub">Cuatro apartados, un solo lugar. Entre proyectos, retos y celebraciones se arma todo lo que después recordamos con una sonrisa.</p>
+    <div class="apar">
+
+      <!-- ACTIVIDAD 1. AGREGAR FOTO AQUÍ: pega el enlace o la ruta dentro de data-foto="" -->
+      <div class="card"><div class="foto" data-foto="https://i.ibb.co/c76xV9D/photo-18-2026-08-28-14-32-09.jpg" data-alt="Proyectos Integradores">Tu foto aquí</div><div class="cb">
+        <h3>Proyectos Integradores</h3><span class="tag">Entrega: 5 de noviembre</span>
+        <!-- EDITAR DESCRIPCIÓN AQUÍ -->
+        <p>Soluciones reales para empresas reales. Trabaja en equipo y presenta tu propuesta.</p>
+        <a class="btn b-nar" href="#calendario" data-p="calendario">Ver proyectos</a></div></div>
+
+      <!-- ACTIVIDAD 2. AGREGAR FOTO AQUÍ: pega el enlace o la ruta dentro de data-foto="" -->
+      <div class="card"><div class="foto" data-foto="https://i.ibb.co/jP6Z1hq7/LICS.jpg" data-alt="Día del Ingeniero Comercial">Tu foto aquí</div><div class="cb">
+        <h3>Día del Ingeniero Comercial</h3><span class="tag">Celebración: 9 de octubre</span>
+        <!-- EDITAR DESCRIPCIÓN AQUÍ -->
+        <p>Actividades recreacionales, para compartir y celebrar</p>
+        <a class="btn b-nar" href="#galeria" data-p="galeria">Ver recuerdos</a></div></div>
+
+      <!-- ACTIVIDAD 3. AGREGAR FOTO AQUÍ: pega el enlace o la ruta dentro de data-foto="" -->
+      <div class="card"><div class="foto" data-foto="https://i.ibb.co/LDcf1J0f/photo-34-2026-08-28-14-36-40.jpg" data-alt="Retos Semestrales">Tu foto aquí</div><div class="cb">
+        <h3>Retos Semestrales</h3><span class="tag">Pitch: 19 de noviembre</span>
+        <!-- EDITAR DESCRIPCIÓN AQUÍ -->
+        <p>Recorre las actividades que marcan tu formación profesional.</p>
+        <a class="btn b-nar" href="#calendario" data-p="calendario">Ver retos</a></div></div>
+
+      <!-- ACTIVIDAD 4. AGREGAR FOTO AQUÍ: pega el enlace o la ruta dentro de data-foto="" -->
+      <div class="card"><div class="foto" data-foto="https://i.ibb.co/q3tjXk7C/f.jpg" data-alt="Talento ICO">Tu foto aquí</div><div class="cb">
+        <h3>Talento ICO</h3><span class="tag y">Reconocimientos: 3 de diciembre</span>
+        <!-- EDITAR DESCRIPCIÓN AQUÍ -->
+        <p>Reconocemos a quienes destacan por innovación, liderazgo y compromiso ético.</p>
+        <a class="btn b-nar" href="#excelencia" data-p="excelencia">Conoce al talento</a></div></div>
+
+      <!-- AGREGAR NUEVA ACTIVIDAD AQUÍ: copia una tarjeta completa (de <div class="card"> hasta su último </div></div>) y pégala justo arriba de esta línea -->
+    </div>
+  </div>
+</section>
+
+<section class="page" id="calendario">
+  <div class="wrap">
+    <h2 class="sec">Calendario</h2>
+    <!-- EDITAR DESCRIPCIÓN AQUÍ -->
+    <p class="sub">Toca un día marcado para ver qué pasa. Cada fecha guarda una historia que vivimos juntos.</p>
+    <div class="cal">
+      <div class="ch">
+        <button id="prev" aria-label="Mes anterior">‹</button>
+        <h3 id="mes"></h3>
+        <button id="next" aria-label="Mes siguiente">›</button>
+      </div>
+      <div class="grid" id="grid"></div>
+      <div class="leyenda">
+        <span><i style="background:var(--naranja)"></i>Actividad</span>
+        <span><i style="background:var(--amarillo)"></i>Talento ICO</span>
+        <span><i style="background:var(--azul)"></i>Hoy</span>
+      </div>
+      <div id="info" aria-live="polite">Selecciona un día para ver los detalles.</div>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="galeria">
+  <div class="wrap">
+    <h2 class="sec">Galería</h2>
+    <!-- EDITAR DESCRIPCIÓN AQUÍ -->
+    <p class="sub">Así vivimos cada semestre. Risas, nervios, trabajos en equipo y amistades que nacieron en las aulas: aquí guardamos todo. Usa las flechas o desliza para ver más fotos de cada recuerdo, y toca una foto para verla en grande.</p>
+    <!-- Las fotos se agregan en el bloque GALERIA del script (al final del archivo) -->
+    <div class="gal" id="gal"></div>
+  </div>
+</section>
+
+<section class="page" id="excelencia">
+  <div class="wrap">
+    <h2 class="sec">Líderes de Excelencia</h2>
+    <!-- EDITAR DESCRIPCIÓN AQUÍ -->
+    <p class="sub">Estudiantes de la carrera que destacan por su rendimiento, liderazgo y compromiso. Ellos marcan el camino.</p>
+    <div class="lgrid" id="lex"></div>
+  </div>
+</section>
+
+<section class="page" id="huella">
+  <div class="wrap">
+    <h2 class="sec">Líderes de la Huella Digital ICO</h2>
+    <!-- EDITAR DESCRIPCIÓN AQUÍ -->
+    <p class="sub">Estudiantes que hacen crecer la comunidad ICO en el mundo digital con ideas, contenido y proyectos.</p>
+    <div class="lgrid" id="lhu"></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <svg width="36" height="36"><use href="#anillo"/></svg>
+    <div><strong>ICO — Ingeniería Comercial</strong><br>Universidad Franz Tamayo · La Paz, Bolivia</div>
+  </div>
+</footer>
+
+<!-- Ventana para ver las fotos en grande -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Foto ampliada">
+  <button type="button" id="lb-x" aria-label="Cerrar">✕</button>
+  <button type="button" class="lbnav" id="lb-prev" aria-label="Foto anterior">❮</button>
+  <img id="lb-img" src="" alt="">
+  <button type="button" class="lbnav" id="lb-next" aria-label="Foto siguiente">❯</button>
+</div>
+
+<script>
+/* =====================================================================
+   GUÍA RÁPIDA PARA EDITAR (todo el contenido está en estos bloques)
+   ---------------------------------------------------------------------
+   FOTOS:  pega el enlace de internet (https://i.ibb.co/.../foto.jpg)
+           o la ruta de un archivo guardado junto a esta página
+           (imagenes/foto1.jpg) entre las comillas de  foto: ''
+   Mientras un campo diga AGREGAR_... o esté vacío '', la página muestra un recuadro "Tu foto aquí".
+   IMPORTANTE: respeta las comillas ' ' y las comas , al final de cada línea.
+   ===================================================================== */
+
+/* ---------- LÍDERES DE EXCELENCIA ---------- */
+const LIDERES_EXCELENCIA = [
+  { nombre: 'Eymi Keyla Pomacusi Barrientos', dato: 'Excelencia Académica I-2025', foto: 'https://i.ibb.co/QFDrTTD3/ex-2025-1.jpg' },
+  { nombre: 'Samir Gutierrez Duran', dato: 'Cuadro de Honor I-2025', foto: 'https://i.ibb.co/W4MbPqPz/cuadro-de-honor-1-2025.jpg' },
+  { nombre: 'Walter Villalba', dato: 'Cuadro de Honor I-2025', foto: 'https://i.ibb.co/GQ6GYZpK/CUADRO-DE-HONOR-1-2025.jpg' },
+  { nombre: 'Jheraldine Valens Nina Echalar', dato: 'Excelencia Académica II-2025', foto: 'https://i.ibb.co/TDTNTH67/EXC-2025-II.jpg' },
+  { nombre: 'Luz Daniela Cocaure Aduviri', dato: 'Cuadro de Honor II-2025', foto: 'https://i.ibb.co/cKmMBYwf/CUADRO-2-2025.jpg' }
+];
+/* ---------- LÍDERES HUELLA DIGITAL (las fotos de este apartado no se agrandan) ---------- */
+const LIDERES_HUELLA = [
+  { nombre: 'Aracely Escobar', dato: ' 6to Semestre · Líder de Desarrollo Web y Arquitectura Digital', foto: 'https://i.ibb.co/S4FFTzJk/Whats-App-Image-2026-10-30-at-10-53-36.jpg' },
+  { nombre: 'Valentina Morro', dato: '6to Semestre · Líder Creativa y de Contenido Visual', foto: 'https://i.ibb.co/zTBgRt6J/fb-2.jpg' },
+  { nombre: 'Jheraldine Nina', dato: '6to Semestre · Coordinadora de Contenido Académico', foto: 'https://i.ibb.co/QFpw0n74/fb-3.jpg' },
+  { nombre: 'Kevin Monrroy', dato: ' 6to Semestre · Apoyo en Innovación y Repositorio', foto: 'https://i.ibb.co/PZCK6Z55/fb-4.jpg' },
+  { nombre: 'Joshua Yapu', dato: '6to Semestre · Apoyo en Estrategia Digital', foto: 'https://i.ibb.co/4LK0H8x/Captura-de-pantalla-2026-10-29-182118.png' }
+];
+
+/* ---------- CARRUSEL "MOMENTOS ICO" (portada) ----------
+   Cada bloque { ... }, es una diapositiva. Para agregar una más, copia un bloque
+   completo y pégalo antes del cierre ];  (foto vertical 1080 x 1350 px se ve mejor) */
+const CARRUSEL = [
+  { titulo: 'Feria de Empleabilidad 2025', descripcion: 'Estudiantes construyendo su futuro profesional', foto: 'https://i.ibb.co/8nWqtckM/photo-16-2026-08-28-14-36-40.jpg' },
+  { titulo: 'Celebración de Todos Santos', descripcion: 'Armado de mesa para Todos Santos', foto: 'https://i.ibb.co/rRTShyL9/photo-20-2026-08-28-14-41-23.jpg' },
+  { titulo: 'Día del Ingeniero Comercial 2026', descripcion: 'Celebrando el talento del ingeniero comercial', foto: 'https://i.ibb.co/5xCt9gz2/Whats-App-Image-2026-10-15-at-15-09-18.jpg' },
+  { titulo: 'Día del Ingeniero Comercial 2025', descripcion: 'Festejando juntos el Día del Ingeniero Comercial', foto: 'https://i.ibb.co/JFjsHqbJ/photo-78-2026-08-28-14-19-42.jpg' },
+  { titulo: 'GTH Popcorn', descripcion: 'Aprender juntos desde el cine', foto: 'https://i.ibb.co/svs6Kz5c/Whats-App-Image-2026-10-05-at-18-05-56.jpg' },
+  /* AGREGAR FOTO 6 AQUÍ */
+  { titulo: 'El Poder de la Economía Naranja', descripcion: 'Seminario junto al Director de la UCPP', foto: 'https://i.ibb.co/JRRggfBp/Whats-App-Image-2026-10-07-at-11-36-15.jpg' },
+  /* AGREGAR FOTO 7 AQUÍ */
+  { titulo: 'Ingenieros comerciales impulsando nuevos horizontes', descripcion: 'Convivencia por el día del Ingeniero Comercial', foto: 'https://i.ibb.co/M5gNdrbB/Whats-App-Image-2026-10-15-at-15-09-45.jpg' }
+  /* AGREGAR NUEVO RECUERDO AQUÍ: pon una coma después del bloque anterior y pega un bloque nuevo */
+];
+
+/* ---------- GALERÍA (cada recuerdo es un carrusel de fotos) ----------
+   texto = título · descripcion = frase corta · fotos = lista de enlaces entre comillas separados por coma
+   Para agregar un recuerdo nuevo: copia un bloque { ... }, y pégalo antes de la línea "AGREGAR NUEVO RECUERDO AQUÍ"
+   Para agregar más fotos a un recuerdo: pon una coma después de la última foto y pega el enlace nuevo entre comillas. */
+const GALERIA = [
+  { texto: 'EL PODER DE LA ECONOMÍA NARANJA', descripcion: 'El ex secretario de turismo de la Alcaldía de La Paz brindó un seminario sobre la importancia de la economía naranja.',
+    fotos: [
+      'https://i.ibb.co/V0L9yj2N/SEMIN.jpg',
+      'https://i.ibb.co/d4v58TqH/e-naranja.jpg',
+      'https://i.ibb.co/Tx8C3SZC/e-naranja-1.jpg',
+      'https://i.ibb.co/Txx5bd7C/e-naranja-2.jpg'
+    ] },
+  { texto: 'TALLER SOBRE NORMATIVA EMPRESARIAL', descripcion: 'Representantes del SEPREC, SIN y AEMP brindaron a los estudiantes una visión práctica sobre las obligaciones y procedimientos comerciales, administrativos y tributarios que deben cumplir las empresas.',
+    fotos: [
+      'https://i.ibb.co/7x7bx3nK/Whats-App-Image-2026-10-06-at-20-27-44.jpg',
+      'https://i.ibb.co/hxf5s2zT/talle-1.jpg',
+      'https://i.ibb.co/R4kZS4n6/talle-2.jpg'
+    ] },
+  { texto: 'Día del Ingeniero Comercial 2026', descripcion: 'Un día para celebrar lo que elegimos ser y a quienes lo vivimos juntos.',
+    fotos: [
+      'https://i.ibb.co/p6fb5MQ0/lics-sentados.jpg',
+      'https://i.ibb.co/6JcWQCjB/I-1.jpg',
+      'https://i.ibb.co/7JHgYgTV/I2.jpg',
+      'https://i.ibb.co/C5vqDC1C/I3.jpg',
+      'https://i.ibb.co/RkvNBjZ5/I4.jpg',
+      'https://i.ibb.co/r24679xM/I5.jpg'
+    ] },
+  { texto: 'Visita corporativa a Flor de Leche', descripcion: 'Conocimos de cerca los procesos de producción y gestión de una empresa local.',
+    fotos: [
+      'https://i.ibb.co/JWw7htZD/Whats-App-Image-2026-09-25-at-14-18-58.jpg',
+      'https://i.ibb.co/6Jpyss0B/photo-3-2026-08-28-14-54-59.jpg',
+      'https://i.ibb.co/nqPjWtD3/photo-16-2026-08-28-14-54-59.jpg',
+      'https://i.ibb.co/cS3QYT9h/Whats-App-Image-2026-09-25-at-14-18-56.jpg'
+    ] },
+  { texto: 'VISITA A ACELERATEC', descripcion: 'Los estudiantes visitaron las oficinas de Aceleratec, una impulsadora de startups, para conocer su labor y el apoyo que brinda al emprendimiento y la innovación.',
+    fotos: [
+      'https://i.ibb.co/yBbwvJgf/ACELE.jpg',
+      'https://i.ibb.co/TMSQfKV9/ACLE-1.jpg',
+      'https://i.ibb.co/SXvD43p8/ACELE-2.jpg'
+    ] },
+  { texto: 'BYF JUNTO A ICO', descripcion: 'BYF e ICO juntos para potenciar conocimientos y fortalecer el aprendizaje.',
+    fotos: [
+      'https://i.ibb.co/cnR2XjM/Whats-App-Image-2026-10-27-at-18-10-25.jpg',
+      'https://i.ibb.co/BKYMZL1Y/Estudiantes-ICO-y-BYF-trabajan-juntos-1-II-2026.jpg',
+      'https://i.ibb.co/8g9KkGKD/Estudiantes-ICO-y-BYF-trabajan-juntos-1-II-2026-3.jpg',
+      'https://i.ibb.co/RkN1dcrF/Estudiantes-ICO-y-BYF-trabajan-juntos-1-II-2026-7.jpg'
+    ] },
+  { texto: 'COFFEE PARTY UNIFRANZ', descripcion: 'Los estudiantes disfrutaron de una noche para demostrar su talento.',
+    fotos: [
+      'https://i.ibb.co/HDMYcTyx/5-TO-COFFEE-PARTY-INTERVENCI-N-CALLE-LINARES-2.jpg',
+      'https://i.ibb.co/8gNMHBXH/Whats-App-Image-2026-10-16-at-7-26-46-PM-1.jpg',
+      'https://i.ibb.co/r2Rqb5SQ/Whats-App-Image-2026-10-16-at-7-26-45-PM.jpg'
+    ] },
+  { texto: 'Copa Intercarreras de Fútbol', descripcion: 'El equipo de Ingeniería Comercial “Los Papuchos de ICO” ganaron la copa intercarreras de fútbol 2025.',
+    fotos: [
+      'https://i.ibb.co/v6p0ZtWD/PARTIDO-1.jpg',
+      'https://i.ibb.co/67jzHYK3/22-MAYO-2025-PARTIDO-ICO.jpg',
+      'https://i.ibb.co/MktJ8jW6/PARTIDO-2.jpg',
+      'https://i.ibb.co/fdM8R6q9/PARTIDO-3.jpg',
+      'https://i.ibb.co/WWcRGrBb/PARTIDO-4.jpg'
+    ] },
+  { texto: 'ICO Talks', descripcion: 'Un espacio donde estudiantes conectaron con emprendedores nacionales, compartiendo experiencias reales que inspiran.',
+    fotos: [
+      'https://i.ibb.co/wFKyjRsR/ICOTALKS-2.jpg',
+      'https://i.ibb.co/Lz6K3cHs/ICOTALKS-3.jpg',
+      'https://i.ibb.co/bR5t2wZr/ICOTALKS-4.jpg',
+      'https://i.ibb.co/8DKpgnGQ/ICOTALKS-5.jpg'
+    ] },
+  { texto: 'Campeonato de Básquet Intercarreras', descripcion: 'El equipo de Básquet Mixto de la carrera se consagró campeón del campeonato 2025, destacándose por su esfuerzo, compromiso y trabajo en equipo.',
+    fotos: [
+      'https://i.ibb.co/6RzqyM5X/ICO-VOLLEY-1.jpg',
+      'https://i.ibb.co/vCcYzbP1/ICO-VOLLEY-2.jpg',
+      'https://i.ibb.co/JFz8KTFX/ICO-VOLLEY-3.jpg',
+      'https://i.ibb.co/cSsMZWYD/ICO-VOLLEY-4.jpg'
+    ] },
+  { texto: 'Desafío Comercial 360°', descripcion: 'Estudiantes de Ingeniería Comercial pusieron a prueba su creatividad, estrategia y espíritu emprendedor en una competencia llena de retos y aprendizaje.',
+    fotos: [
+      'https://i.ibb.co/whGdsdn5/DESAFIO-COMERCIAL-360.jpg',
+      'https://i.ibb.co/twSv2FP5/DESAFIO-COMERCIAL-360-2.jpg',
+      'https://i.ibb.co/JFHFVw35/DESAFIO-COMERCIAL-360-3.jpg'
+    ] },
+  { texto: 'Premiación del Reto LabSag ICO', descripcion: 'Reconocimiento a los estudiantes que destacaron por su excelente desempeño en el simulador LAB SAG.',
+    fotos: [
+      'https://i.ibb.co/CKztnFNq/LABSA-1.jpg',
+      'https://i.ibb.co/4wnXbYYx/LABSA-2.jpg',
+      'https://i.ibb.co/n8BSRJB3/LABSAG-CONCURSO-3.jpg',
+      'https://i.ibb.co/kgwVcDrn/LABSAG-4.jpg',
+      'https://i.ibb.co/3ycz5L3R/LABSAG-5.jpg',
+      'https://i.ibb.co/39qNYJ9s/LABSAG-6.jpg',
+      'https://i.ibb.co/8nCKZ1zP/LABSAG-7.jpg'
+    ] },
+  { texto: 'Taller de educación financiera', descripcion: 'Aprendimos herramientas prácticas para administrar mejor las finanzas personales y del negocio.',
+    fotos: [
+      'https://i.ibb.co/k2Zq03Pb/photo-13-2026-08-28-14-58-29.jpg'
+    ] }
+  /* AGREGAR NUEVO RECUERDO AQUÍ: pon una coma después del bloque anterior y pega un bloque nuevo */
+];
+
+/* ---------- CALENDARIO ----------
+   'AAAA-MM-DD': [título, tipo ('' = actividad, 'tal' = Talento ICO), descripción corta, [fotos]] */
+const EVENTOS = {
+  '2026-09-30': ['Taller de Excel para negocios', '', 'Taller práctico de herramientas de Excel aplicadas a la gestión empresarial.', []],
+  '2026-10-08': ['Conferencia con líderes del sector', '', 'Charla con profesionales que comparten su experiencia en el mundo empresarial.', []],
+  '2026-10-09': ['Día del Ingeniero Comercial', '', 'Celebramos el día de nuestra profesión con actividades, reconocimiento y camaradería.', [
+    /* AGREGAR FOTO AQUÍ: pega enlaces entre comillas separados por coma. Ejemplo:
+       'https://i.ibb.co/xxxxx/foto1.jpg',
+       'https://i.ibb.co/xxxxx/foto2.jpg' */
+  ]],
+  '2026-10-21': ['Visita corporativa', '', 'Recorrido por una empresa para conocer su operación y cultura organizacional.', []],
+  '2026-11-05': ['Entrega de Proyectos Integradores', '', 'Los equipos presentan las soluciones desarrolladas para empresas reales.', []],
+  '2026-11-19': ['Pitch del reto semestral', '', 'Presentación de propuestas ante un jurado en formato pitch.', []],
+  '2026-12-03': ['Reconocimientos Talento ICO', 'tal', 'Reconocimiento a los estudiantes destacados por innovación, liderazgo y ética.', []]
+  /* AGREGAR NUEVO RECUERDO AQUÍ: pon una coma después de la línea anterior y copia una línea nueva */
+};
+
+/* =====================================================================
+   DE AQUÍ HACIA ABAJO ES EL FUNCIONAMIENTO DE LA PÁGINA. NO HACE FALTA EDITAR.
+   ===================================================================== */
+
+/* Un campo está "lleno" si tiene algo y no es un marcador AGREGAR_... */
+const lleno = v => !!v && !/^\s*AGREGAR/i.test(v);
+
+function ir(id) {
+  if (!document.getElementById(id)) id = 'inicio';
+  document.querySelectorAll('.page').forEach(s => s.classList.toggle('on', s.id === id));
+  document.querySelectorAll('nav a').forEach(a => a.classList.toggle('act', a.dataset.p === id));
+  window.scrollTo(0, 0);
+}
+document.addEventListener('click', e => {
+  const l = e.target.closest('[data-p]');
+  if (l) { e.preventDefault(); ir(l.dataset.p); }
+});
+
+const foto = (f, alt, n) => lleno(f)
+  ? `<img src="${f}" alt="${alt}" loading="lazy" draggable="false">`
+  : `<div class="ph">Tu foto aquí${n ? ' · ' + n : ''}</div>`;
+
+/* Si un enlace de foto está mal, se muestra un aviso en vez de una imagen rota */
+document.addEventListener('error', e => {
+  const im = e.target;
+  if (im.tagName === 'IMG' && im.closest('.gal,.lider,.foto,.info-fotos,.carrusel-slide')) {
+    const d = document.createElement('div');
+    d.className = 'ph';
+    d.textContent = 'Revisa el enlace de la foto';
+    im.replaceWith(d);
+  }
+}, true);
+
+/* Fotos de las tarjetas de Actividades */
+document.querySelectorAll('.foto[data-foto]').forEach(el => {
+  if (lleno(el.dataset.foto)) el.innerHTML = `<img src="${el.dataset.foto}" alt="${el.dataset.alt || ''}">`;
+});
+
+function lideres(lista, id, clase) {
+  document.getElementById(id).innerHTML = lista.map(p =>
+    `<figure class="lider ${clase}">${foto(p.foto, p.nombre)}<figcaption><strong>${p.nombre}</strong>${p.dato}</figcaption></figure>`).join('');
+}
+lideres(LIDERES_EXCELENCIA, 'lex', '');
+lideres(LIDERES_HUELLA, 'lhu', 'h');
+
+/* Galería: cada recuerdo es un carrusel de fotos */
+const gal = document.getElementById('gal');
+const gPos = [];
+gal.innerHTML = GALERIA.map((g, gi) => {
+  const fs = (g.fotos || []).filter(lleno);
+  gPos[gi] = 0;
+  const imgs = fs.length
+    ? fs.map((u, k) => `<img src="${u}" alt="${g.texto}" data-g="${gi}" data-k="${k}" loading="lazy">`).join('')
+    : `<div class="ph">Tu foto aquí · ${gi + 1}</div>`;
+  const ctr = fs.length > 1
+    ? `<button type="button" class="gbtn gprev" data-g="${gi}" data-d="-1" aria-label="Foto anterior">❮</button>` +
+      `<button type="button" class="gbtn gnext" data-g="${gi}" data-d="1" aria-label="Foto siguiente">❯</button>` +
+      `<div class="gdots">${fs.map((_, k) => `<button type="button" class="gdot${k === 0 ? ' on' : ''}" data-g="${gi}" data-k="${k}" aria-label="Foto ${k + 1}"></button>`).join('')}</div>`
+    : '';
+  return `<figure data-gi="${gi}"><div class="gcar"><div class="gtrack">${imgs}</div>${ctr}</div><figcaption>${g.texto}<p>${g.descripcion || ''}</p></figcaption></figure>`;
+}).join('');
+
+function gIr(gi, k) {
+  const fig = gal.querySelector(`figure[data-gi="${gi}"]`);
+  const n = fig.querySelectorAll('.gtrack > *').length;
+  k = (k + n) % n;
+  gPos[gi] = k;
+  fig.querySelector('.gtrack').style.transform = `translateX(-${k * 100}%)`;
+  fig.querySelectorAll('.gdot').forEach((d, i) => d.classList.toggle('on', i === k));
+}
+gal.addEventListener('click', e => {
+  const b = e.target.closest('.gbtn,.gdot');
+  if (!b) return;
+  const gi = +b.dataset.g;
+  gIr(gi, b.dataset.d ? gPos[gi] + (+b.dataset.d) : +b.dataset.k);
+});
+
+/* Deslizar con el dedo en la galería */
+let gx0 = null, gFig = null;
+gal.addEventListener('touchstart', e => {
+  const f = e.target.closest('figure');
+  if (!f || !f.querySelector('.gbtn')) { gx0 = null; return; }
+  gFig = f; gx0 = e.touches[0].clientX;
+}, { passive: true });
+gal.addEventListener('touchend', e => {
+  if (gx0 === null) return;
+  const dx = e.changedTouches[0].clientX - gx0;
+  if (Math.abs(dx) > 40) { const gi = +gFig.dataset.gi; gIr(gi, gPos[gi] + (dx < 0 ? 1 : -1)); }
+  gx0 = null;
+});
+
+/* Calendario */
+const hoy = new Date();
+let a = hoy.getFullYear(), m = hoy.getMonth();
+const grid = document.getElementById('grid'), info = document.getElementById('info');
+const p2 = n => String(n).padStart(2, '0');
+const fHoy = `${hoy.getFullYear()}-${p2(hoy.getMonth() + 1)}-${p2(hoy.getDate())}`;
+
+function dibujar() {
+  document.getElementById('mes').textContent = new Date(a, m, 1).toLocaleDateString('es', { month: 'long', year: 'numeric' });
+  grid.innerHTML = '';
+  ['L','M','M','J','V','S','D'].forEach(d => grid.insertAdjacentHTML('beforeend', `<div class="wd">${d}</div>`));
+  const inicio = (new Date(a, m, 1).getDay() + 6) % 7;
+  const dias = new Date(a, m + 1, 0).getDate();
+  for (let i = 0; i < inicio; i++) grid.insertAdjacentHTML('beforeend', '<div class="blank"></div>');
+  for (let d = 1; d <= dias; d++) {
+    const f = `${a}-${p2(m + 1)}-${p2(d)}`, e = EVENTOS[f];
+    const b = document.createElement('button');
+    b.className = 'day' + (e ? (e[1] === 'tal' ? ' tal' : ' ev') : '') + (f === fHoy ? ' hoy' : '');
+    b.textContent = d;
+    b.onclick = () => {
+      document.querySelectorAll('.day.sel').forEach(x => x.classList.remove('sel'));
+      b.classList.add('sel');
+      if (e) {
+        let h = `<strong>${d} · ${e[0]}</strong>`;
+        if (e[2]) h += `<p>${e[2]}</p>`;
+        const fotos = (e[3] || []).filter(lleno);
+        if (fotos.length) h += `<div class="info-fotos">${fotos.map(u => `<img src="${u}" alt="${e[0]}" loading="lazy">`).join('')}</div>`;
+        info.innerHTML = h;
+      } else {
+        info.textContent = `${d}: no hay actividades este día.`;
+      }
+    };
+    grid.appendChild(b);
+  }
+}
+document.getElementById('prev').onclick = () => { m--; if (m < 0) { m = 11; a--; } dibujar(); };
+document.getElementById('next').onclick = () => { m++; if (m > 11) { m = 0; a++; } dibujar(); };
+dibujar();
+
+/* Carrusel */
+const track = document.getElementById('carrusel-track');
+track.innerHTML = CARRUSEL.map((c, i) =>
+  `<div class="carrusel-slide">${lleno(c.foto)
+    ? `<img src="${c.foto}" alt="${c.titulo}">`
+    : `<div class="carrusel-slide-placeholder">Tu foto aquí · ${i + 1}<p>Agrega aquí el enlace de tu foto</p></div>`}</div>`).join('');
+
+const slides = document.querySelectorAll('.carrusel-slide');
+const controles = document.getElementById('carrusel-controles');
+const btnAnterior = document.getElementById('btn-anterior');
+const btnSiguiente = document.getElementById('btn-siguiente');
+const tituloSlide = document.getElementById('carrusel-titulo');
+const descripcionSlide = document.getElementById('carrusel-descripcion');
+
+let indiceActual = 0;
+let intervaloAuto;
+
+function crearPuntos() {
+  slides.forEach((_, index) => {
+    const punto = document.createElement('button');
+    punto.className = 'carrusel-punto';
+    punto.setAttribute('aria-label', 'Ir a la imagen ' + (index + 1));
+    if (index === 0) punto.classList.add('activo');
+    punto.addEventListener('click', () => irAlSlide(index));
+    controles.appendChild(punto);
+  });
+}
+
+function actualizarCarrusel() {
+  track.style.transform = `translateX(-${indiceActual * 100}%)`;
+  document.querySelectorAll('.carrusel-punto').forEach((punto, index) => {
+    punto.classList.toggle('activo', index === indiceActual);
+  });
+  tituloSlide.textContent = CARRUSEL[indiceActual].titulo;
+  descripcionSlide.textContent = CARRUSEL[indiceActual].descripcion;
+  reiniciarAutoplay();
+}
+
+function irAlSlide(index) { indiceActual = index; actualizarCarrusel(); }
+function anterior() { indiceActual = (indiceActual - 1 + slides.length) % slides.length; actualizarCarrusel(); }
+function siguiente() { indiceActual = (indiceActual + 1) % slides.length; actualizarCarrusel(); }
+
+function iniciarAutoplay() { intervaloAuto = setInterval(siguiente, 5000); }
+function reiniciarAutoplay() { clearInterval(intervaloAuto); iniciarAutoplay(); }
+
+btnAnterior.addEventListener('click', anterior);
+btnSiguiente.addEventListener('click', siguiente);
+
+const wrapper = document.querySelector('.carrusel-wrapper');
+wrapper.addEventListener('mouseenter', () => clearInterval(intervaloAuto));
+wrapper.addEventListener('mouseleave', reiniciarAutoplay);
+
+/* Deslizar con el dedo en el celular */
+let x0 = null;
+wrapper.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true });
+wrapper.addEventListener('touchend', e => {
+  if (x0 === null) return;
+  const dx = e.changedTouches[0].clientX - x0;
+  if (Math.abs(dx) > 40) { dx < 0 ? siguiente() : anterior(); }
+  x0 = null;
+});
+
+crearPuntos();
+actualizarCarrusel();
+
+/* Ampliar fotos al tocarlas (en la galería se puede pasar a las demás fotos del evento).
+   Las fotos de Huella Digital (.lider.h) NO se amplían. */
+const lb = document.getElementById('lb'), lbImg = document.getElementById('lb-img');
+let lbSet = [], lbPos = 0;
+function lbShow() {
+  lbImg.src = lbSet[lbPos];
+  lb.classList.toggle('multi', lbSet.length > 1);
+}
+function lbMover(d) {
+  if (lbSet.length < 2) return;
+  lbPos = (lbPos + d + lbSet.length) % lbSet.length;
+  lbShow();
+}
+document.addEventListener('click', e => {
+  const im = e.target.closest('.gal img,.info-fotos img,.foto img,.lider:not(.h) img,.carrusel-slide img');
+  if (!im) return;
+  if (im.dataset.g !== undefined) {
+    lbSet = (GALERIA[+im.dataset.g].fotos || []).filter(lleno);
+    lbPos = +im.dataset.k;
+  } else {
+    lbSet = [im.src];
+    lbPos = 0;
+  }
+  lbImg.alt = im.alt;
+  lb.classList.add('on');
+  lbShow();
+});
+lb.addEventListener('click', e => {
+  if (e.target.id === 'lb-prev') { lbMover(-1); return; }
+  if (e.target.id === 'lb-next') { lbMover(1); return; }
+  lb.classList.remove('on');
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') lb.classList.remove('on');
+  if (lb.classList.contains('on')) {
+    if (e.key === 'ArrowLeft') lbMover(-1);
+    if (e.key === 'ArrowRight') lbMover(1);
+  }
+});
+
+ir(location.hash.slice(1) || 'inicio');
+</script>
+</body>
+</html>
